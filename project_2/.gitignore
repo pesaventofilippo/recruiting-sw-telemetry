@@ -1,0 +1,15 @@
+# Build folders
+build/
+bin/
+cmake-build-debug/
+
+# Log files
+*.log
+*.tmp
+*.csv
+!candump.log
+
+# Other files
+.idea/
+.vscode/
+.DS_Store
