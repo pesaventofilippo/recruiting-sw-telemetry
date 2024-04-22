@@ -1,12 +1,8 @@
 #include <map>
-#include <queue>
-#include <mutex>
 #include <thread>
 #include <cstring>
 #include <iostream>
 #include <cstdio>
-#include <chrono>
-#include <condition_variable>
 #include "reader.h"
 using namespace std;
 
@@ -15,20 +11,11 @@ extern "C" {
 }
 
 
-struct RawMessage {
-    char message[MAX_CAN_MESSAGE_SIZE];
-    uint64_t timestamp;
-};
-
 struct ParsedMessage {
     uint16_t id;
     uint64_t payload;
     uint64_t timestamp;
 };
-
-queue<RawMessage> canQueue;  // Shared queue to hold messages to parse
-mutex canMutex;              // Lock to prevent race conditions
-condition_variable canFlag;  // Used to notify thread when new messages are available
 
 enum STATE { IDLE, RUN };   // The two states for the state machine
 STATE state = IDLE;         // State for the state machine
@@ -38,35 +25,6 @@ int sessionID = 0;          // Session ID to save different sessions to differen
 map<uint16_t, uint64_t> messageCounts;      // Map message IDs to their count
 map<uint16_t, uint64_t> firstReceivedAt;    // Map message IDs to their first received timestamp
 map<uint16_t, uint64_t> lastReceivedAt;     // Map message IDs to their last received timestamp
-
-
-uint64_t msTimestamp() {
-    // Return the current unix timestamp in milliseconds
-    using namespace chrono;
-    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-}
-
-
-void canReaderLoop() {
-    char message[MAX_CAN_MESSAGE_SIZE];
-    while (true) {
-        int bytesRead = can_receive(message);
-        if (bytesRead > 0) {
-            // Save the message and the timestamp
-            RawMessage canMsg;
-            strncpy(canMsg.message, message, MAX_CAN_MESSAGE_SIZE);
-            canMsg.timestamp = msTimestamp();
-
-            // Lock the queue for writing
-            unique_lock<mutex> lock(canMutex);
-            canQueue.push(canMsg);
-            lock.unlock();
-
-            // Notify that a new message is present
-            canFlag.notify_one();
-        }
-    }
-}
 
 
 RawMessage waitForMessage() {
