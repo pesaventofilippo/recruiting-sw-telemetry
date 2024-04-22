@@ -9,6 +9,8 @@ set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-pthread -O0 -g -w")
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/fake_receiver
+    ${CMAKE_CURRENT_SOURCE_DIR}/reader
 )
 
 add_library(
@@ -16,7 +18,8 @@ add_library(
     SHARED
 
     # Sources
-    ${CMAKE_CURRENT_SOURCE_DIR}/fake_receiver.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/fake_receiver/fake_receiver.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/reader/reader.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}

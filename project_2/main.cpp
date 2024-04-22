@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <chrono>
 #include <condition_variable>
+#include "reader.h"
 using namespace std;
 
 extern "C" {
