@@ -11,6 +11,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/fake_receiver
     ${CMAKE_CURRENT_SOURCE_DIR}/reader
+    ${CMAKE_CURRENT_SOURCE_DIR}/parser
     ${CMAKE_CURRENT_SOURCE_DIR}/utils
 )
 
@@ -21,6 +22,7 @@ add_library(
     # Sources
     ${CMAKE_CURRENT_SOURCE_DIR}/fake_receiver/fake_receiver.c
     ${CMAKE_CURRENT_SOURCE_DIR}/reader/reader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/parser/parser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/timestamp.cpp
 )
 

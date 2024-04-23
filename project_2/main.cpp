@@ -1,21 +1,13 @@
 #include <map>
 #include <thread>
-#include <cstring>
 #include <iostream>
-#include <cstdio>
 #include "reader.h"
+#include "parser.h"
 using namespace std;
 
 extern "C" {
     #include "fake_receiver.h"
 }
-
-
-struct ParsedMessage {
-    uint16_t id;
-    uint64_t payload;
-    uint64_t timestamp;
-};
 
 enum STATE { IDLE, RUN };   // The two states for the state machine
 STATE state = IDLE;         // State for the state machine
@@ -43,34 +35,11 @@ RawMessage waitForMessage() {
 }
 
 
-ParsedMessage parseRawMessage(const RawMessage &msg) {
-    // The string canMsg.message is in the format "ID#PAYLOAD":
-    // - ID is expressed in hexadecimal, and is at most 12 bits long (can be less)
-    // - PAYLOAD is expressed in hexadecimal, and is at most 8 bytes (can be less)
-    // For example, the payload "6601" is a 2-byte payload, where the first byte is 0x66 and the second byte is 0x01
-
-    ParsedMessage parsedMsg;
-    parsedMsg.timestamp = msg.timestamp;
-
-    // Split the message into two strings using '#'
-    string message(msg.message);
-    size_t idDelimiter = message.find('#');
-    string idStr = message.substr(0, idDelimiter);
-    string payloadStr = message.substr(idDelimiter + 1);
-
-    // Convert id and payload to integers
-    parsedMsg.id = stoi(idStr, nullptr, 16);
-    parsedMsg.payload = stoull(payloadStr, nullptr, 16);
-
-    return parsedMsg;
-}
-
-
 void saveStats(const char* FILE_PATH) {
     FILE* file = fopen(FILE_PATH, "w");
 
     // Write statistics in CSV format
-    fprintf(file, "ID,number_of_messages,mean_time\n");
+    fprintf(file, "ID,number_of_messages,mean_time_ms\n");
     for (auto it = messageCounts.begin(); it != messageCounts.end(); it++) {
         uint16_t id = it->first;
         uint64_t count = it->second;
@@ -88,6 +57,7 @@ void startSession() {
     // Open the log file using the session ID (.tmp until done)
     string filename = "session_" + to_string(sessionID) + ".log.tmp";
     logFile = fopen(filename.c_str(), "w");
+    fprintf(logFile, "TIMESTAMP_MS\tID\tPAYLOAD\n");
 
     // Reset the statistics
     messageCounts.clear();
@@ -116,7 +86,7 @@ void stopSession() {
 
 
 void handleMessage(const ParsedMessage &msg) {
-    const char* LOG_FORMAT = "%llu\t0x%03X\t0x%X\n"; // As readme: "(%llu) %03X#%X\n"
+    const char* LOG_FORMAT = "%llu\t%03X\t%X\n"; // As readme: "(%llu) %03X#%X\n"
 
     // Log the message to the log file
     fprintf(logFile, LOG_FORMAT, msg.timestamp, msg.id, msg.payload);
