@@ -1,2 +1,10 @@
+# Build folders
 build/
 bin/
+cmake-build-debug/
+
+# Other files
+.idea/
+.vscode/
+.DS_Store
+imgui.ini
