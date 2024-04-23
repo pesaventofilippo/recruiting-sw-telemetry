@@ -23,3 +23,15 @@ ParsedMessage parseRawMessage(const RawMessage &msg) {
 
     return parsedMsg;
 }
+
+
+bool isStartMessage(const ParsedMessage &msg) {
+    // A start message is a message with ID 0x0A0 and payload 0x6601 or 0xFF01
+    return msg.id == 0x0A0 && (msg.payload == 0x6601 || msg.payload == 0xFF01);
+}
+
+
+bool isStopMessage(const ParsedMessage &msg) {
+    // A stop message is a message with ID 0x0A0 and payload 0x66FF
+    return msg.id == 0x0A0 && msg.payload == 0x66FF;
+}

@@ -14,3 +14,7 @@ struct ParsedMessage {
 
 
 ParsedMessage parseRawMessage(const RawMessage &msg);
+
+bool isStartMessage(const ParsedMessage &msg);
+
+bool isStopMessage(const ParsedMessage &msg);

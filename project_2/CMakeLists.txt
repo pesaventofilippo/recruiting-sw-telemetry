@@ -13,6 +13,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/reader
     ${CMAKE_CURRENT_SOURCE_DIR}/parser
     ${CMAKE_CURRENT_SOURCE_DIR}/utils
+    ${CMAKE_CURRENT_SOURCE_DIR}/statistics
 )
 
 add_library(
@@ -24,6 +25,7 @@ add_library(
     ${CMAKE_CURRENT_SOURCE_DIR}/reader/reader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/parser/parser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/timestamp.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/statistics/statistics.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
