@@ -18,3 +18,4 @@
 #include <imgui/misc/cpp/imgui_stdlib.h>
 
 #include "implot.h"
+#include "data_structs.h"

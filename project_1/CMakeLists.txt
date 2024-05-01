@@ -25,6 +25,10 @@ add_library(
     
     # Sources
     ${CMAKE_CURRENT_SOURCE_DIR}/core/app.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/authentication.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/data_management.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/loginTab.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/userTabs.cpp
 
     # GUI
     ${imgui_srcs}
