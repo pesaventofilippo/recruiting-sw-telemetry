@@ -1,7 +1,7 @@
 # Build folders
 build/
 bin/
-cmake-build-debug/
+cmake-build-*/
 
 # Other files
 .idea/

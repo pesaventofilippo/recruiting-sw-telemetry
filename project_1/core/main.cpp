@@ -1,66 +1,10 @@
-#include <stdio.h>
-#include <iostream>
-#include <signal.h>
-#include <unistd.h>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include "imgui/imgui.h"
-#include "imgui/backends/imgui_impl_glfw.h"
-#include "imgui/backends/imgui_impl_opengl2.h"
-
+#include "common_imports.h"
 #include "app.h"
 
 GLFWwindow* window;
 
-GLFWwindow* open_window();
-void init_imgui(GLFWwindow* window);
-void render(GLFWwindow* window, const ImVec4& clear_color);
 
-void sig_handler(int sig_number){
-    if(sig_number == SIGINT || sig_number == SIGTERM){
-        glfwSetWindowShouldClose(window, 1);
-    }
-}
-
-int main(){
-    std::cout << "--- Project 1 ---\n" << std::endl;
-
-    signal(SIGINT, sig_handler);
-    signal(SIGTERM, sig_handler);
-
-    std::cout << "Opening Window" << std::endl;
-    window = open_window();
-    init_imgui(window);
-    ImGuiIO& io = ImGui::GetIO();
-    ImVec4 clear_color = ImVec4(0.06f, 0.06f, 0.06f, 0.94f);
-    std::cout << "Done" << std::endl;
-
-    while (!glfwWindowShouldClose(window))
-    {
-        glfwPollEvents();
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL2_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        // renders tabs/buttons/...
-        app_render();
-
-        render(window, clear_color);
-    }
-
-    std::cout << "Shutdown" << std::endl;
-    ImGui_ImplOpenGL2_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-
-    glfwDestroyWindow(window);
-    glfwTerminate();
-
-    return 0;
-}
-
-GLFWwindow* open_window(){
+GLFWwindow* open_window() {
     // Setup window
     glewExperimental = GL_TRUE;
     if (!glfwInit())
@@ -79,7 +23,8 @@ GLFWwindow* open_window(){
     return window;
 }
 
-void init_imgui(GLFWwindow* window){
+
+void init_imgui(GLFWwindow* window) {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGuiContext* ctx = ImGui::CreateContext();
@@ -94,7 +39,11 @@ void init_imgui(GLFWwindow* window){
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL2_Init();
+
+    // Setup ImPlot
+    ImPlot::CreateContext();
 }
+
 
 void render(GLFWwindow* window, const ImVec4& clear_color){
     static int display_w, display_h;
@@ -107,17 +56,61 @@ void render(GLFWwindow* window, const ImVec4& clear_color){
     glClear(GL_COLOR_BUFFER_BIT);
 
     ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-    if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    {
+    if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
         GLFWwindow* backup_current_context = glfwGetCurrentContext();
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
         glfwMakeContextCurrent(backup_current_context);
     }
-    else
-    {
+    else {
         glfwMakeContextCurrent(window);
     }
 
     glfwSwapBuffers(window);
+}
+
+
+void sig_handler(int sig_number) {
+    if (sig_number == SIGINT || sig_number == SIGTERM) {
+        glfwSetWindowShouldClose(window, 1);
+    }
+}
+
+
+int main() {
+    std::cout << "--- Project 1 ---\n" << std::endl;
+
+    signal(SIGINT, sig_handler);
+    signal(SIGTERM, sig_handler);
+
+    std::cout << "Opening Window" << std::endl;
+    window = open_window();
+    init_imgui(window);
+    ImGuiIO& io = ImGui::GetIO();
+    ImVec4 clear_color = ImVec4(0.06f, 0.06f, 0.06f, 0.94f);
+    std::cout << "Done" << std::endl;
+
+    while (!glfwWindowShouldClose(window)) {
+        glfwPollEvents();
+        // Start the Dear ImGui frame
+        ImGui_ImplOpenGL2_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        // renders tabs/buttons/...
+        app_render();
+
+        render(window, clear_color);
+    }
+
+    std::cout << "Shutdown" << std::endl;
+    ImGui_ImplOpenGL2_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImPlot::DestroyContext();
+    ImGui::DestroyContext();
+
+    glfwDestroyWindow(window);
+    glfwTerminate();
+
+    return 0;
 }
