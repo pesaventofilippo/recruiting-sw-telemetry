@@ -8,7 +8,6 @@ bool authenticated = false;
 User currentUser;
 std::string username;
 std::string password;
-
 std::vector<DriverData> loadedDrivers;
 
 

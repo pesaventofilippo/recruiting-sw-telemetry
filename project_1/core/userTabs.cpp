@@ -1,25 +1,18 @@
 #include "userTabs.h"
 #include "data_management.h"
+#include "plots.h"
 
 
 void displayUserTabs() {
     ImGui::Begin("Data Plot");
+
     if (loadedDrivers.empty()) {
         ImGui::Text("No data loaded yet.");
     }
     else {
-        ImPlot::BeginPlot("Throttle vs Distance", "Distance", "Throttle");
-        for (const auto& driver : loadedDrivers) {
-            std::vector<float> x, y;
-            for (const auto& point : driver.dataPoints) {
-                x.push_back(point.dist);
-                y.push_back(point.speed);
-            }
-            ImPlot::PushStyleColor(ImPlotCol_Line, driver.color);
-            ImPlot::PlotLine(driver.name.c_str(), x.data(), y.data(), x.size());
-            ImPlot::PopStyleColor();
-        }
-        ImPlot::EndPlot();
+        plotSpeed();
+        plotThrottle();
+        plotBrake();
     }
 
     ImGui::End();
@@ -27,19 +20,47 @@ void displayUserTabs() {
 
 
 void displayMaintainerTabs() {
+    ImGui::Begin("Style");
+
+    if (loadedDrivers.empty()) {
+        ImGui::Text("No data loaded yet.");
+    }
+    else {
+        for (auto& driver : loadedDrivers) {
+            ImGui::ColorEdit3(driver.name.c_str(), &driver.color.x);
+            if (ImGui::Button("Reset")) {
+                driver.color = ImVec4(1, 1, 1, 1);
+            }
+            ImGui::Separator();
+        }
+    }
+
+    ImGui::End();
 }
 
 
 void displayAdminTabs() {
+    ImGui::Begin("Manage Data");
+
     static std::string name;
-    ImGui::Begin("Load Data");
     ImGui::InputText("Driver Identifier", &name);
     if (ImGui::Button("Load")) {
-        loadDriver(name, ImVec4(1, 0, 0, 1));
+        loadDriver(name, ImVec4(1, 1, 1, 1));
     }
+
     ImGui::Separator();
-    if (ImGui::Button("Reset")) {
+    if (ImGui::Button("Reset All")) {
         resetDrivers();
     }
+
+    ImGui::Separator();
+    ImGui::Text("Remove driver: ");
+    for (auto& driver : loadedDrivers) {
+        ImGui::SameLine();
+        if (ImGui::Button(driver.name.c_str())) {
+            removeDriver(driver.name);
+        }
+    }
+
     ImGui::End();
 }

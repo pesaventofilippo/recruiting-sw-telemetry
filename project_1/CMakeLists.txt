@@ -29,6 +29,7 @@ add_library(
     ${CMAKE_CURRENT_SOURCE_DIR}/core/data_management.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/loginTab.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/userTabs.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/plots.cpp
 
     # GUI
     ${imgui_srcs}
