@@ -5,3 +5,4 @@
 void plotSpeed();
 void plotThrottle();
 void plotBrake();
+void plotGear();

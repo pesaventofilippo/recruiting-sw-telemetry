@@ -13,6 +13,7 @@ void displayUserTabs() {
         plotSpeed();
         plotThrottle();
         plotBrake();
+        plotGear();
     }
 
     ImGui::End();

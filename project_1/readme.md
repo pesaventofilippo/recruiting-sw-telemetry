@@ -59,7 +59,7 @@ cd build
 cmake ..
 make -j$(nproc)
 cd ..
-./bin/project1
+./bin/project_1
 ```
 
 This will build the executable that will be located in `./bin` directory.
