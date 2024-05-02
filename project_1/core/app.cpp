@@ -1,9 +1,10 @@
-#include "common_imports.h"
 #include "app.h"
-#include "authentication.h"
 #include "loginTab.h"
 #include "userTabs.h"
+#include "authentication.h"
+#include "common_imports.h"
 
+// Global variables for the state
 bool authenticated = false;
 User currentUser;
 std::string username;
@@ -20,6 +21,8 @@ void app_render() {
     }
     else {
         ImGui::Text("Permissions:");
+        // Display different tabs based on permissions.
+        // If an user has role == x, they can also access tabs for role >= x.
 
         if (currentUser.role <= 2) {
             ImGui::Text("+ User");
@@ -35,7 +38,7 @@ void app_render() {
         }
 
         ImGui::Separator();
-        ImGui::Text("Logged in as %s!", currentUser.username.c_str());
+        ImGui::Text("Logged in as: %s.", currentUser.username.c_str());
         ImGui::Separator();
         if (ImGui::Button("Logout")) {
             logout();

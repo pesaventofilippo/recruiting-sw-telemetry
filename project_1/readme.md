@@ -1,26 +1,37 @@
 # Project 1
-
-> ⚠️ This document is fairly technical to maintain brevity, if you have **any** questions ask your recruiter or come visit us at floor -2 of Povo 2.
+Project 1 for the E-Agle TRT Software recruiting test.
 
 ## Abstract
+This is a GUI application that simulates visualization of F1 telemetry data from a qualifying lap.  
+There are multiple users, each one with a different access level to the application, and each one can access different tabs.
 
-Create a desktop application using [ImGui](https://github.com/ocornut/imgui). You are free to choose the task of the application but you must at least implement the following:
+## Data management
+At first, the application doesn't load any data, meaning that if a normal user logs in, no data will be present.
+The data can be loaded by an Admin user first, then it will be available to other users for visualization (even after a logout).
 
-- User login.
-- Global state of the application.
+### Loading data
+The `Manage Data` tab contains a field to specify a driver to load.  
+The driver data (if present) gets loaded from a file inside the `telemetry/` folder, with the name `<driver_identifier>.csv`.  
+The driver identifier is an upper-case string of 3 characters, like `LEC`: the currently available drivers are `LEC`, `VER` and `HAM`.
 
-The application mus be organized with multiple tabs, each in a different source file.  
-Keep the project clean, setup it for scalability, allowing for new features implementations.  
-Try using some thirdparty libraries to add functionalities to your application.
 
-### User login
+## Tabs
+The application is composed of 5 main tabs:
+- **Info**: Displays some info about the current state, such as the current user and its permissions
+- **Login**: Contains the login form, where the user can login with its credentials. Only visible if the user is not logged in.
+- **Data Plot**: Contains the telemetry plots, if some data has been loaded.
+- **Style**: Color pickers to change the plotting colors for each loaded driver.
+- **Data Management**: Load new drivers for plotting, or remove the existing ones.
 
-Use ImGui to allow a user to login. You could setup different login types (Admin, Maintainer, Basic user), or simply logged or not.  
-Based on the login state, change the attitude of your application, maybe locking some functionalities.
+## Users
+There are 3 access levels:
 
-### Global State
+| Username     | Password   | Access Level   | Description                                                                                |
+|--------------|------------|----------------|--------------------------------------------------------------------------------------------|
+| `user`       | `password` | User (2)       | The normal user, can login and view the loaded telemetry data.                             |
+| `maintainer` | `password` | Maintainer (1) | Same privileges as the User, and can modify the plotting style.                            |
+| `admin`      | `password` | Admin (0)      | All privileges (user and maintainer privileges, and can manage the loaded telemetry data). |
 
-Define with some programming thechnique a way to access to the same data across multiple files/classes. For example if the login happened then the whole application should know the new login state.
 
 ## Getting started
 
@@ -38,21 +49,17 @@ For Debian / Ubuntu you can use:
 sudo apt install build-essential cmake libglfw3-dev libglew-dev mesa-utils
 ```
 
-### Setup
+### Building
 
-- Download the project files [here](https://download-directory.github.io/?url=https%3A%2F%2Fgithub.com%2Feagletrt%2Frecruiting-sw%2Ftree%2Fmaster%2Ftelemetry%2Fproject_1)
-- Create a new GitHub repository and upload the project files via git
-- Start working on the task, creating git commits as you make progress
-- When it's time to deliver, please send your recruiter a link to your github repository
-
-## Building
-
-The build system that we use is cmake.
+You can build and run the application with the following commands:
 
 ```bash
 mkdir -p build
+cd build
 cmake ..
 make -j$(nproc)
+cd ..
+./bin/project1
 ```
 
 This will build the executable that will be located in `./bin` directory.

@@ -26,6 +26,7 @@ void displayMaintainerTabs() {
         ImGui::Text("No data loaded yet.");
     }
     else {
+        // Display a color picker for each driver
         for (auto& driver : loadedDrivers) {
             ImGui::ColorEdit3(driver.name.c_str(), &driver.color.x);
             if (ImGui::Button("Reset")) {
