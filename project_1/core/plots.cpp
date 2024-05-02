@@ -3,7 +3,7 @@
 
 
 void plotSpeed() {
-    ImPlot::BeginPlot("2024 Australian GP Quali - Lap Telemetry", "Distance", "Speed");
+    ImPlot::BeginPlot("2024 Australian GP Quali - Speed", "Distance", "Speed");
 
     for (const auto& driver : loadedDrivers) {
         std::vector<float> x, y;
@@ -21,7 +21,7 @@ void plotSpeed() {
 
 
 void plotThrottle() {
-    ImPlot::BeginPlot("2024 Australian GP Quali - Lap Telemetry", "Distance", "Throttle");
+    ImPlot::BeginPlot("2024 Australian GP Quali - Throttle", "Distance", "Throttle");
 
     for (const auto& driver : loadedDrivers) {
         std::vector<float> x, y;
@@ -39,7 +39,7 @@ void plotThrottle() {
 
 
 void plotBrake() {
-    ImPlot::BeginPlot("2024 Australian GP Quali - Lap Telemetry", "Distance", "Brake");
+    ImPlot::BeginPlot("2024 Australian GP Quali - Brake", "Distance", "Brake");
 
     for (const auto& driver : loadedDrivers) {
         std::vector<float> x, y;
