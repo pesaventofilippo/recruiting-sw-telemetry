@@ -30,7 +30,7 @@ void displayMaintainerTabs() {
         // Display a color picker for each driver
         for (auto& driver : loadedDrivers) {
             ImGui::ColorEdit3(driver.name.c_str(), &driver.color.x);
-            if (ImGui::Button("Reset")) {
+            if (ImGui::Button(("Reset " + driver.name + " color").c_str())) {
                 driver.color = ImVec4(1, 1, 1, 1);
             }
             ImGui::Separator();
